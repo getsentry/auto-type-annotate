@@ -1,0 +1,56 @@
+name: main
+
+on:
+  push:
+    branches: [main, test-me-*]
+    tags: '*'
+  pull_request:
+
+jobs:
+  tox:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - {env: py311, python: '3.11'}
+        - {env: py313, python: '3.13'}
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python }}
+    - run: python -mpip install --upgrade setuptools tox virtualenv
+    - run: tox -e ${{ matrix.env }}
+
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+    - uses: pre-commit/action@v3.0.1
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+    - run: |
+        pip install build
+        python -m build
+    - uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.sha }}
+        path: dist/*
+
+  collector:
+    needs: [build, pre-commit, tox]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - name: check for failures
+      if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+      run: echo 'dependent job failed' && exit 1
