@@ -2,7 +2,7 @@ name: main
 
 on:
   push:
-    branches: [main, test-me-*]
+    branches: [main, test-me-*, release/**]
     tags: '*'
   pull_request:
 
