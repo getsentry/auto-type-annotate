@@ -32,7 +32,11 @@ def _to_mod(fname: str, roots: tuple[str, ...]) -> str:
     relpaths.sort(key=len)
     for relative in relpaths:
         assert not relative.startswith('..'), relative  # report a bug?
-        return relative.removesuffix('.py').replace('/', '.')
+        return (
+            relative.removesuffix('.py')
+            .replace('/', '.')
+            .replace('\\', '.')
+        )
     else:
         raise AssertionError(f'{fname=} not found in {roots=}')
 
