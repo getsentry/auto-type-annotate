@@ -286,6 +286,12 @@ def _add_imports(s: str, imports: set[str]) -> str:
     for node in tree.body:
         if isinstance(node, ast.ImportFrom) and node.module == '__future__':
             continue
+        elif (
+                isinstance(node, ast.Expr) and
+                isinstance(node.value, ast.Constant) and
+                isinstance(node.value.value, str)
+        ):
+            continue  # docstring!
         else:
             lines = s.splitlines(True)
             lines.insert(node.lineno - 1, sorted_imports)

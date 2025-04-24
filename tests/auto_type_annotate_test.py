@@ -165,6 +165,19 @@ from foo import bar
     assert _add_imports(src, {'from foo import bar'}) == expected
 
 
+def test_add_imports_with_docstring():
+    src = '''\
+"""hello world"""
+from __future__ import annotations
+'''
+    expected = '''\
+"""hello world"""
+from __future__ import annotations
+from foo import bar
+'''
+    assert _add_imports(src, {'from foo import bar'}) == expected
+
+
 def test_rewrite_src_simple():
     src = '''\
 def f(x):
