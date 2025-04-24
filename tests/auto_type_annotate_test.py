@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import ast
 import contextlib
+import ntpath
+import os
 import subprocess
 import sys
+from unittest.mock import patch
 
 from auto_type_annotate import _add_imports
 from auto_type_annotate import _rewrite_src
@@ -20,6 +23,11 @@ _MOD = Mod('t.py', 't')
 def test_to_mod_uses_longest_path():
     assert _to_mod('a/b/c.py', ('.', 'a')) == 'b.c'
     assert _to_mod('a/b/c.py', ('a', '.')) == 'b.c'
+
+
+@patch.object(os.path, 'relpath', new=ntpath.relpath)
+def test_to_mod_uses_longest_path_windows():
+    assert _to_mod(r'a\b\c.py', ('.', 'a')) == 'b.c'
 
 
 def test_to_mod_src_layout():
