@@ -90,6 +90,28 @@ def test_find_untyped_async_def():
     assert _find_untyped(src) == [(_MOD, 'f')]
 
 
+def test_find_untyped_skips_abstract():
+    src = '''\
+import abc
+
+class C:
+    @abc.abstractmethod
+    def f(self): pass
+'''
+    assert _find_untyped(src) == []
+
+
+def test_find_untyped_skips_abstract_from_imported():
+    src = '''\
+from abc import abstractmethod
+
+class C:
+    @abstractmethod
+    def f(self): pass
+'''
+    assert _find_untyped(src) == []
+
+
 @contextlib.contextmanager
 def _dmypy():
     subprocess.check_call((sys.executable, '-m', 'mypy.dmypy', 'run', '.'))

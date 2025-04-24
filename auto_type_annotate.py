@@ -52,6 +52,13 @@ def _args(node: ast.AsyncFunctionDef | ast.FunctionDef) -> Generator[ast.arg]:
             yield subnode
 
 
+def _is_abstract(node: ast.AST) -> bool:
+    return (
+        isinstance(node, ast.Attribute) and node.attr == 'abstractmethod' or
+        isinstance(node, ast.Name) and node.id == 'abstractmethod'
+    )
+
+
 class FindUntyped(ast.NodeVisitor):
     def __init__(self) -> None:
         self._mod: list[Mod] = []
@@ -73,7 +80,10 @@ class FindUntyped(ast.NodeVisitor):
             self,
             node: ast.AsyncFunctionDef | ast.FunctionDef,
     ) -> None:
-        if not self._in_func[-1]:
+        if (
+                not self._in_func[-1] and
+                not any(_is_abstract(dec) for dec in node.decorator_list)
+        ):
             args = tuple(_args(node))
             if node.name == '__init__' and len(args) > 1:
                 missing_annotation = False
