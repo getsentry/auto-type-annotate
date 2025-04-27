@@ -36,6 +36,7 @@ def _to_mod(fname: str, roots: tuple[str, ...]) -> str:
             relative.removesuffix('.py')
             .replace('/', '.')
             .replace('\\', '.')
+            .replace(".__init__", "")
         )
     else:
         raise AssertionError(f'{fname=} not found in {roots=}')

@@ -34,6 +34,9 @@ def test_to_mod_src_layout():
     assert _to_mod('src/foo.py', ('.', 'src')) == 'foo'
     assert _to_mod('bar.py', ('.', 'src')) == 'bar'
 
+def test_to_mod_init_files():
+    assert _to_mod('a/__init__.py', ('.',)) == 'a'
+
 
 def _find_untyped(s):
     visitor = FindUntyped()
