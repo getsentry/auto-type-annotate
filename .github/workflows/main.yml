@@ -6,6 +6,10 @@ on:
     tags: '*'
   pull_request:
 
+
+permissions:
+  contents: write
+  pull-requests: write
 jobs:
   tox:
     runs-on: ubuntu-latest
