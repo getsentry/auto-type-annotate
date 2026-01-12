@@ -19,7 +19,7 @@ jobs:
         - {env: py311, python: '3.11'}
         - {env: py313, python: '3.13'}
     steps:
-    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4 # v4 # v2
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python }}
@@ -29,7 +29,7 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4 # v4 # v2
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - uses: actions/setup-python@v5
       with:
         python-version: '3.13'
@@ -38,7 +38,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4 # v4 # v2
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
     - uses: actions/setup-python@v5
       with:
         python-version: '3.13'
